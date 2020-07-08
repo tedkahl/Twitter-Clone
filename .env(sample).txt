@@ -1,0 +1,7 @@
+ATLAS_URI={mongodb cloud server}
+
+myprivatekey=myprivatekey
+
+SERVER_PORT=3000
+
+PORT=5000
