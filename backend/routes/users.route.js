@@ -23,10 +23,10 @@ router.get("/userpage/:username/:limit", (req, res) => {
   User.findOne({ username: req.params.username }).select("-password") //find user
     .then(user => {
       user.tweets=user.tweets||[];
-      let start=Math.max(user.tweets.length-req.params.limit,0)
-      let tweetlist = user.tweets.slice(start, user.tweets.length) 
+      reverseArray(user.tweets);  //display in chronological order
+      let end=Math.min(req.params.limit,user.tweets.length)
+      let tweetlist = user.tweets.slice(0,end) 
         .map(tweet=>{return tweet.id}); //get ids of the most recent tweets up to limit
-      reverseArray(tweetlist); //display in chronological order
         
         Tweet.find({ _id: { $in: tweetlist } }) //get data for tweets in tweetlist
         .then(tweets=>{
