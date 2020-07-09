@@ -100,10 +100,6 @@ class TwitterClone extends Component {
                   />
                 </Route>
 
-                <Route path="/signin">
-                  <SignIn updateuser={this.updateUser.bind(this)} />
-                </Route>
-
                 <Route path="/homepage">
                   <HomePage
                     user={this.state.user}
