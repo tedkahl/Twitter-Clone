@@ -30,7 +30,8 @@ export default class UserPage extends Component{
             failed:false,
         }
     }
-
+    
+    /*Get all necessary data (user, other users, tweets) and set state*/
     getUpage(){
         console.log(this.state);
         axios.get(`${server}/api/users/userpage/${this.props.username}/${this.state.limit}`)

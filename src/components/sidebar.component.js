@@ -4,7 +4,7 @@ import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import axios from 'axios';
 import {server} from '../util/env'
 
-/*Sidebar seen by logged-in users. Displays user's name, with links to home page, user page, edit profile and 
+/*Sidebar seen by logged-in users. Displays user's name, links to home page, user page, edit profile and 
 sign out*/
 export default class SideBar extends Component{
     constructor(props){

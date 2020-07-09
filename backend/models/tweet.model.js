@@ -17,7 +17,6 @@ const tweetSchema = new mongoose.Schema({
     liked_by:[id],    
     likes:{type:Number,default:0},
     retweets:{type:Number,default:0},
-    //images:Boolean
 },{
     timestamps:true
 });
@@ -36,4 +35,4 @@ function validateTweet(tweet) {
 }
 
 exports.Tweet=Tweet;
-exports.validate=validateTweet; //no parentheses here remember that
+exports.validate=validateTweet; 

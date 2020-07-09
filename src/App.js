@@ -21,6 +21,7 @@ const App = () => {
     </div>)
 }
 
+/*Main component for project. Stores info for logged-in user to avoid a backend call for any change.*/ 
 class TwitterClone extends Component {
   constructor(props) {
     super(props);

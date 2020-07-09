@@ -45,7 +45,7 @@ export default class Timeline extends Component{
             .catch(err => console.log(err))
     }
 
-
+    //Retrieve data for ${limit} additional tweets from the backend when 'more' button is pressed
     getMore()
     {
         let start=this.state.tweets.length;

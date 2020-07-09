@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"
 import axios from 'axios';
 import {server} from '../util/env'
+
 /*Displays sign-in form.*/
 export default class SignIn extends Component {
     constructor(props){
@@ -30,7 +31,7 @@ export default class SignIn extends Component {
     }
 
     onSubmit(e){
-        e.preventDefault();//prevent default form submission
+        e.preventDefault();
         console.log(this.state);
         axios.post(`${server}/api/users/signin`,this.state,{withCredentials:true}) 
             .then(res=>{
