@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Select from "react-select";
 import axios from "axios";
 import { server } from "../util/env";
@@ -127,7 +128,7 @@ export default class CreateProfile extends Component {
               isMulti={true}
             />
           </div>
-
+          
           <div className="form-group">
             <input
               type="submit"
@@ -136,6 +137,9 @@ export default class CreateProfile extends Component {
             />
           </div>
         </form>
+        <Link to="/">
+          <button className="btn btn-info">Back</button>
+        </Link>
       </div>
     );
   }
