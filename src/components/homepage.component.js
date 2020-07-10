@@ -90,6 +90,7 @@ export default class HomePage extends Component {
         tweets={this.state.tweets}
         names={this.state.names}
         limit={this.state.limit}
+        userid={this.state.user.id}
       />
     ) : (
       <p>Loading...</p>
