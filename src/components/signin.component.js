@@ -60,7 +60,7 @@ export default class SignIn extends Component {
           </div>
           <div className="form-group">
             <label>Password:</label>
-            <input
+            <password
               type="text"
               required
               className="form-control"
