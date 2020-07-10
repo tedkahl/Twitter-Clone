@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import { convertDate, like, retweet } from "../util/util";
+import { convertDate, like, retweet, unRetweet, del } from "../util/util";
 import { BrowserRouter as Route, Link } from "react-router-dom";
 import { server } from "../util/env";
 
@@ -19,9 +19,37 @@ export default class Timeline extends Component {
     };
   }
 
+  del(index) {
+    let id = this.state.tweets[index].id;
+    del(id)
+      .then(() => {
+        let tweets = this.state.tweets;
+        let timel = this.state.timeline;
+        tweets.splice(index, 1);
+        timel.splice(index, 1);
+
+        this.setState({ tweets: tweets, timeline: timel });
+      })
+      .catch((err) => console.log(err));
+  }
+
+  unRetweet(index) {
+    let id = this.state.tweets[index].id;
+    let date = this.state.tweets[index].date;
+    unRetweet(id)
+      .then(() => {
+        let tweets = this.state.tweets;
+        let timel = this.state.timeline;
+        tweets.splice(index, 1);
+        timel.splice(index, 1);
+
+        this.setState({ tweets: tweets, timeline: timel });
+      })
+      .catch((err) => console.log(err));
+  }
+
   retweet(index) {
     let id = this.state.tweets[index].id;
-    console.log(id);
     retweet(id)
       .then(() => {
         let timel = this.state.tweets;
@@ -76,12 +104,15 @@ export default class Timeline extends Component {
 
     let timel = this.state.tweets.map((t, i) => {
       return Tweet({
+        userid: this.state.userid,
         tweet: t,
         name: this.state.names[t.original_tweeter],
         tweeted_by_name: this.state.names[t.tweeted_by.id],
         index: i,
         like: this.like.bind(this),
         retweet: this.retweet.bind(this),
+        del: this.del.bind(this),
+        unRetweet: this.unRetweet.bind(this),
       });
     });
 
@@ -102,6 +133,9 @@ export default class Timeline extends Component {
 
 /*Tweet component used in timeline*/
 function Tweet(props) {
+  let mine = props.userid == props.tweet.original_tweeter;
+  let retweeted =
+    props.tweet.is_retweet && props.tweet.tweeted_by.id == props.userid;
   return (
     <div key={props.index}>
       {props.tweet.is_retweet ? (
@@ -120,27 +154,67 @@ function Tweet(props) {
       <p>
         Likes:{props.tweet.likes} Retweets:{props.tweet.retweets}
       </p>
-      {props.tweet.liked ? (
-        <button
-          className="btn btn-danger"
-          onClick={() => props.like(props.index, "unlike")}
-        >
-          Unlike
-        </button>
-      ) : (
-        <button
-          className="btn btn-primary"
-          onClick={() => props.like(props.index, "like")}
-        >
-          Like
-        </button>
-      )}
+      {props.userid ? (
+        <div className="d-flex">
+          {props.tweet.liked ? (
+            <button
+              className="btn btn-info"
+              onClick={() => props.like(props.index, "unlike")}
+            >
+              Liked
+            </button>
+          ) : (
+            <button
+              className="btn btn-primary"
+              onClick={() => props.like(props.index, "like")}
+            >
+              Like
+            </button>
+          )}
+          <button
+            className="btn btn-success"
+            onClick={() => props.retweet(props.index)}
+          >
+            Retweet
+          </button>
+          <DropDown mine={mine} retweeted={retweeted} del={()=>props.del(props.index)} unRetweet={()=>props.unRetweet(props.index)}/>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function DropDown(props) {
+  const [open, setOpen] = useState();
+  if(!props.mine && !props.retweeted) return null;
+
+  const menuClass = `dropdown-menu${open ? " show" : ""}`;
+
+  return (
+    <div className="dropdown">
       <button
-        className="btn btn-success"
-        onClick={() => props.retweet(props.index)}
+        id="ddbutton"
+        className="btn btn-secondary"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        onClick={() => {
+          setOpen(!open);
+        }}
       >
-        Retweet
+        ...
       </button>
+      <div className={menuClass} aria-labelledby="ddbutton">
+        {props.retweeted ? (
+          <button className="dropdown-item" onClick={() => props.unRetweet()}>
+            Undo retweet
+          </button>
+        ) : null}
+        {props.mine ? (
+          <button className="dropdown-item" onClick={() => props.del()}>
+            Delete
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }

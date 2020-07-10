@@ -40,6 +40,22 @@ export function retweet(id) {
   });
 }
 
+export function del(id) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${server}/api/tweets/delete/${id}`, { withCredentials: true })
+      .then((res) => resolve(res))
+      .catch((err) => reject(err));
+  });
+}
+export function unRetweet(id) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${server}/api/tweets/unretweet/${id}`, { withCredentials: true })
+      .then((res) => resolve(res))
+      .catch((err) => reject(err));
+  });
+}
 //operation is "follow" or "unfollow"
 export function follow(id, operation) {
   return new Promise((resolve, reject) => {
