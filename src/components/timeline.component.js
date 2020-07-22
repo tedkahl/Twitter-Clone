@@ -22,7 +22,8 @@ export default class Timeline extends Component {
   del(index) {
     let id = this.state.tweets[index].id;
     del(id)
-      .then(() => {
+      .then((response) => {
+        console.log(response);
         let tweets = this.state.tweets;
         let timel = this.state.timeline;
         tweets.splice(index, 1);
@@ -35,9 +36,10 @@ export default class Timeline extends Component {
 
   unRetweet(index) {
     let id = this.state.tweets[index].id;
-    let date = this.state.tweets[index].date;
-    unRetweet(id)
-      .then(() => {
+    let date = this.state.tweets[index].tweeted_by.date;
+    unRetweet(id, date)
+      .then((response) => {
+        console.log(response);
         let tweets = this.state.tweets;
         let timel = this.state.timeline;
         tweets.splice(index, 1);
@@ -51,7 +53,8 @@ export default class Timeline extends Component {
   retweet(index) {
     let id = this.state.tweets[index].id;
     retweet(id)
-      .then(() => {
+      .then((response) => {
+        console.log(response);
         let timel = this.state.tweets;
         timel[index].retweets++;
         this.setState({ tweets: timel });
@@ -62,9 +65,9 @@ export default class Timeline extends Component {
   like(index, operation) {
     let liked = operation == "like";
     let id = this.state.tweets[index].id;
-    console.log(id);
     like(id, operation)
-      .then(() => {
+      .then((response) => {
+        console.log(response);
         let timel = this.state.tweets;
         timel[index].liked = liked;
         timel[index].likes += liked ? 1 : -1;
@@ -177,7 +180,12 @@ function Tweet(props) {
           >
             Retweet
           </button>
-          <DropDown mine={mine} retweeted={retweeted} del={()=>props.del(props.index)} unRetweet={()=>props.unRetweet(props.index)}/>
+          <DropDown
+            mine={mine}
+            retweeted={retweeted}
+            del={() => props.del(props.index)}
+            unRetweet={() => props.unRetweet(props.index)}
+          />
         </div>
       ) : null}
     </div>
@@ -186,7 +194,7 @@ function Tweet(props) {
 
 function DropDown(props) {
   const [open, setOpen] = useState();
-  if(!props.mine && !props.retweeted) return null;
+  if (!props.mine && !props.retweeted) return null;
 
   const menuClass = `dropdown-menu${open ? " show" : ""}`;
 

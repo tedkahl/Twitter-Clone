@@ -26,7 +26,7 @@ export function like(id, operation) {
   return new Promise((resolve, reject) => {
     axios
       .get(`${server}/api/tweets/${operation}/${id}`, { withCredentials: true })
-      .then((res) => resolve(res))
+      .then((res) => resolve(res.data))
       .catch((err) => reject(err));
   });
 }
@@ -35,7 +35,7 @@ export function retweet(id) {
   return new Promise((resolve, reject) => {
     axios
       .get(`${server}/api/tweets/retweet/${id}`, { withCredentials: true })
-      .then((res) => resolve(res))
+      .then((res) => resolve(res.data))
       .catch((err) => reject(err));
   });
 }
@@ -43,16 +43,20 @@ export function retweet(id) {
 export function del(id) {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${server}/api/tweets/delete/${id}`, { withCredentials: true })
-      .then((res) => resolve(res))
+      .delete(`${server}/api/tweets/${id}`, { withCredentials: true })
+      .then((res) => resolve(res.data))
       .catch((err) => reject(err));
   });
 }
-export function unRetweet(id) {
+export function unRetweet(id, date) {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${server}/api/tweets/unretweet/${id}`, { withCredentials: true })
-      .then((res) => resolve(res))
+      .post(
+        `${server}/api/tweets/unretweet/${id}`,
+        { date },
+        { withCredentials: true }
+      )
+      .then((res) => resolve(res.data))
       .catch((err) => reject(err));
   });
 }
@@ -61,7 +65,7 @@ export function follow(id, operation) {
   return new Promise((resolve, reject) => {
     axios
       .get(`${server}/api/users/${operation}/${id}`, { withCredentials: true })
-      .then((res) => resolve(res))
+      .then((res) => resolve(res.data))
       .catch((err) => reject(err));
   });
 }
