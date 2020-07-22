@@ -104,7 +104,8 @@ export default class UserPage extends Component {
   }
 
   followButton() {
-    if (!this.state.me.id || this.state.user.id == this.state.me.id) return null;
+    if (!this.state.me.id || this.state.user.id == this.state.me.id)
+      return null;
     if (this.state.user.followers.includes(this.state.me.id)) {
       return (
         <button

@@ -128,7 +128,7 @@ export default class CreateProfile extends Component {
               isMulti={true}
             />
           </div>
-          
+
           <div className="form-group">
             <input
               type="submit"

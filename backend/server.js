@@ -1,6 +1,6 @@
 var express = require("express");
 var cors = require("cors");
-var mongoose = require("mongoose");
+var mongoose = require("mongoose").set("debug", true);
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 
