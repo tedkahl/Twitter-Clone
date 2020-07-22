@@ -60,8 +60,8 @@ export default class SignIn extends Component {
           </div>
           <div className="form-group">
             <label>Password:</label>
-            <password
-              type="text"
+            <input
+              type="password"
               required
               className="form-control"
               onChange={this.onChangePassword}
