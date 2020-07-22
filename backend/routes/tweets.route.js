@@ -2,6 +2,7 @@ const auth = require("../middleware/auth");
 const { Tweet, validate } = require("../models/tweet.model");
 const { User } = require("../models/user.model");
 const express = require("express");
+const { equal } = require("@hapi/joi");
 const router = express.Router();
 //auth is the first callback, which decides whether to pass to the next one. router.METHOD() can take any number
 //of callbacks
@@ -28,14 +29,24 @@ router.post("/update/:id", auth, (req, res) => {
   } else res.status(400).json("Wrong user");
 });
 
-//Deletes a tweet. Unused for now.
-router.delete("/:id", auth, (req, res) => {
-  Tweet.deleteOne({ original_tweeter: req.user._id, _id: req.params.id })
-    .then((result) => {
-      if (result.deletedCount == 1) res.status(200).send("deleted");
-      else res.status(400).json("error");
-    })
-    .catch((err) => res.status(400).json(err.message));
+//Deletes a tweet.
+router.delete("/:id", auth, async (req, res) => {
+  tweet = await Tweet.findOneAndDelete({ _id: req.params.id });
+
+  console.log("tweet:");
+  console.log(tweet);
+  const ids = tweet.tweeted_by.map((tweeted_by) => {
+    return tweeted_by.id;
+  });
+  console.log("ids:");
+  console.log(ids);
+  r = await User.updateMany(
+    { _id: { $in: ids } },
+    { $pull: { tweets: { id: req.params.id } } },
+    { multi: true }
+  );
+  console.log(r);
+  return res.json(r);
 });
 
 //updateOne does not return a promise, so should use await instead
@@ -86,7 +97,7 @@ router.get("/retweet/:id", auth, async (req, res) => {
   else return res.status(400).json("error");
 });
 
-//Unused for now
+//Undoes a retweet
 router.post("/unretweet/:id", auth, async (req, res) => {
   let r = await Promise.all([
     Tweet.find({ _id: req.params.id })
